@@ -9,17 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Be+Vietnam+Pro:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --bg:#0A0D13;
-    --panel:#121723;
-    --panel-2:#0F141E;
-    --border:#1F2735;
-    --border-2:#2A3445;
-    --gold:#CBA45A;
-    --teal:#3FB6A8;
-    --text:#E8EBF0;
-    --muted:#8A93A6;
-    --film:#FFFFFF;
-    --radius:14px;
+    --bg:#0A0D13; --panel:#121723; --panel-2:#0F141E;
+    --border:#1F2735; --border-2:#2A3445;
+    --gold:#CBA45A; --teal:#3FB6A8;
+    --text:#E8EBF0; --muted:#8A93A6; --film:#FFFFFF; --radius:14px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
@@ -28,16 +21,12 @@
       radial-gradient(1200px 600px at 80% -10%, rgba(63,182,168,.06), transparent 60%),
       radial-gradient(900px 500px at -10% 110%, rgba(203,164,90,.06), transparent 60%),
       var(--bg);
-    color:var(--text);
-    font-family:"Be Vietnam Pro",system-ui,sans-serif;
-    font-weight:400;
-    line-height:1.55;
-    -webkit-font-smoothing:antialiased;
+    color:var(--text); font-family:"Be Vietnam Pro",system-ui,sans-serif;
+    font-weight:400; line-height:1.55; -webkit-font-smoothing:antialiased;
     padding:24px 18px 64px;
   }
   .wrap{max-width:940px;margin:0 auto}
 
-  /* Header */
   header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:26px}
   .brand{display:flex;align-items:center;gap:12px}
   .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(203,164,90,.14);flex:0 0 auto;margin-top:9px}
@@ -45,23 +34,19 @@
   .brand p{color:var(--muted);font-size:13px;margin-top:2px}
   .ver{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--teal);border:1px solid var(--border-2);border-radius:999px;padding:5px 11px;white-space:nowrap;margin-top:4px}
 
-  /* Cards */
   .card{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:18px}
   .card-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
   .card-head .ic{width:18px;height:18px;color:var(--teal);flex:0 0 auto}
   .card-head h2{font-family:"Fraunces",serif;font-weight:500;font-size:18px}
   .card-head .step{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);margin-left:auto;letter-spacing:1px}
 
-  /* Tabs */
   .tabs{display:flex;gap:6px;background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:16px}
   .tab{flex:1;border:none;background:transparent;color:var(--muted);font-family:inherit;font-size:14px;font-weight:500;padding:9px 10px;border-radius:7px;cursor:pointer;transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center;gap:7px}
   .tab .ic{width:15px;height:15px}
   .tab[aria-selected="true"]{background:rgba(63,182,168,.12);color:var(--text);box-shadow:inset 0 0 0 1px rgba(63,182,168,.35)}
-  .tab .soon{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--gold);border:1px solid rgba(203,164,90,.4);border-radius:4px;padding:1px 5px;letter-spacing:.5px}
   .pane{display:none}
   .pane.active{display:block}
 
-  /* Dropzone */
   .drop{border:1.5px dashed var(--border-2);border-radius:12px;padding:30px 20px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
   .drop:hover,.drop.over{border-color:var(--teal);background:rgba(63,182,168,.05)}
   .drop .ic{width:30px;height:30px;color:var(--muted);margin:0 auto 10px;display:block}
@@ -74,8 +59,8 @@
   .drop.has .meta span{font-family:"JetBrains Mono",monospace;font-size:11.5px}
   .btn-ghost{background:transparent;border:1px solid var(--border-2);color:var(--text);font-family:inherit;font-size:13px;padding:8px 13px;border-radius:8px;cursor:pointer;transition:border-color .15s}
   .btn-ghost:hover{border-color:var(--teal)}
+  .btn-ghost:disabled{opacity:.5;cursor:default}
 
-  /* AI form (shell) */
   .field{margin-bottom:14px}
   .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:7px}
   textarea,input[type=text]{width:100%;background:var(--panel-2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:inherit;font-size:14px;padding:11px 12px;resize:vertical}
@@ -83,10 +68,15 @@
   .seg{display:flex;gap:6px}
   .seg button{flex:1;background:var(--panel-2);border:1px solid var(--border);color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:14px;padding:9px;border-radius:8px;cursor:pointer}
   .seg button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold);background:rgba(203,164,90,.08)}
-  .note{display:flex;align-items:center;gap:9px;background:rgba(203,164,90,.06);border:1px solid rgba(203,164,90,.25);border-radius:9px;padding:10px 12px;font-size:12.5px;color:#D9C79B;margin-top:4px}
-  .note .ic{width:15px;height:15px;color:var(--gold);flex:0 0 auto}
 
-  /* Slider (shared) */
+  .ai-msg{margin-top:12px;font-size:13px;color:#E8A0A0;background:rgba(200,80,80,.08);border:1px solid rgba(200,80,80,.25);border-radius:9px;padding:10px 12px}
+  .ai-results{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
+  .gcard{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--panel-2)}
+  .gcard img{width:100%;aspect-ratio:1/1;object-fit:cover;background:#fff;display:block}
+  .gactions{display:flex;gap:6px;padding:8px}
+  .gactions .btn-ghost{flex:1;font-size:12px;padding:7px 4px;text-align:center}
+  @media (min-width:620px){ .ai-results{grid-template-columns:repeat(3,1fr)} }
+
   .slider-row{margin-top:2px}
   .slider-row .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
   .slider-row .top .lab{font-size:13px;color:var(--muted)}
@@ -98,7 +88,6 @@
   .ends{display:flex;justify-content:space-between;margin-top:7px}
   .ends span{font-size:11px;color:var(--muted)}
 
-  /* Compose */
   #compose{display:none}
   .empty{text-align:center;padding:42px 20px;color:var(--muted)}
   .empty .ic{width:34px;height:34px;color:var(--border-2);margin:0 auto 12px;display:block}
@@ -111,24 +100,19 @@
   .chip{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted);background:var(--panel-2);border:1px solid var(--border);border-radius:7px;padding:6px 10px}
   .chip b{color:var(--text);font-weight:500}
 
-  /* Export bar */
   .export{display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap}
   .export .res{display:flex;align-items:center;gap:8px;flex:1;min-width:170px}
   .export .res label{font-size:13px;color:var(--muted)}
   select{background:var(--panel-2);border:1px solid var(--border);color:var(--text);font-family:"JetBrains Mono",monospace;font-size:13px;padding:9px 11px;border-radius:8px;flex:1;cursor:pointer}
   select:focus{outline:none;border-color:var(--teal)}
-  .btn-gold{background:var(--gold);border:none;color:#1A140A;font-family:inherit;font-weight:600;font-size:14px;padding:11px 18px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:filter .15s}
+  .btn-gold{background:var(--gold);border:none;color:#1A140A;font-family:inherit;font-weight:600;font-size:14px;padding:11px 18px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:filter .15s}
   .btn-gold:hover{filter:brightness(1.06)}
   .btn-gold .ic{width:16px;height:16px}
-  .btn-gold:disabled{opacity:.45;cursor:not-allowed;filter:none}
+  .btn-gold:disabled{opacity:.55;cursor:default;filter:none}
 
   footer{text-align:center;color:var(--muted);font-size:11.5px;margin-top:28px;font-family:"JetBrains Mono",monospace}
 
-  @media (max-width:560px){
-    body{padding:18px 14px 56px}
-    .brand h1{font-size:22px}
-    .card{padding:16px}
-  }
+  @media (max-width:560px){ body{padding:18px 14px 56px} .brand h1{font-size:22px} .card{padding:16px} }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -143,7 +127,7 @@
         <p>Nón Sơn · Thiết kế màng phim nhúng nước</p>
       </div>
     </div>
-    <div class="ver">v0.1</div>
+    <div class="ver">v0.2</div>
   </header>
 
   <!-- 1. NGUỒN HỌA TIẾT -->
@@ -162,7 +146,6 @@
       <button class="tab" id="tabAI" role="tab" aria-selected="false">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4"/><path d="M13 4 9 14l-5 2 5 2 4 10 2-5 5-2-5-2-2-9z" transform="scale(.62) translate(6 3)"/></svg>
         Tạo bằng AI
-        <span class="soon">SẮP CÓ</span>
       </button>
     </div>
 
@@ -176,17 +159,20 @@
       <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" hidden />
     </div>
 
-    <!-- Pane: AI (shell) -->
+    <!-- Pane: AI -->
     <div class="pane" id="paneAI">
       <div class="field">
         <label>Ảnh tham khảo (tùy chọn)</label>
-        <div class="drop" style="padding:18px" aria-disabled="true">
-          <span>Tải ảnh gốc để AI giữ tinh thần thiết kế</span>
+        <div class="drop" id="aiDrop" tabindex="0" role="button" style="padding:20px" aria-label="Tải ảnh tham khảo">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.5-3.5L9 20"/></svg>
+          <strong>Kéo thả hoặc bấm chọn ảnh gốc</strong>
+          <span>Để AI giữ tinh thần thiết kế — bỏ trống nếu tạo mới từ từ khóa</span>
         </div>
+        <input type="file" id="aiFileInput" accept="image/png,image/jpeg,image/webp" hidden />
       </div>
       <div class="field">
         <label>Từ khóa / ý tưởng</label>
-        <textarea rows="2" placeholder="VD: hoa văn lá nhiệt đới, tông xanh teal, phong cách tối giản"></textarea>
+        <textarea id="aiKeywords" rows="2" placeholder="VD: hoa văn lá nhiệt đới, tông xanh teal, phong cách tối giản"></textarea>
       </div>
       <div class="field">
         <div class="slider-row">
@@ -203,11 +189,12 @@
           <button aria-pressed="false">6</button>
         </div>
       </div>
-      <button class="btn-gold" style="width:100%;justify-content:center" disabled>Tạo họa tiết</button>
-      <div class="note">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5m0 3h.01"/></svg>
-        Phần tạo bằng AI cắm ở phase tiếp theo — cần cấu hình Supabase + key. Hiện dùng tab “Tải lên” để dựng film ngay.
-      </div>
+      <button class="btn-gold" id="aiGenBtn" style="width:100%">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4"/><path d="M13 4 9 14l-5 2 5 2 4 10 2-5 5-2-5-2-2-9z" transform="scale(.62) translate(6 3)"/></svg>
+        <span id="aiGenLabel">Tạo họa tiết</span>
+      </button>
+      <div class="ai-msg" id="aiMsg" style="display:none"></div>
+      <div class="ai-results" id="aiResults"></div>
     </div>
   </section>
 
@@ -221,7 +208,7 @@
 
     <div class="empty" id="emptyState">
       <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
-      <p>Tải họa tiết ở Bước 1 để bắt đầu dựng màng phim</p>
+      <p>Chọn họa tiết ở Bước 1 để bắt đầu dựng màng phim</p>
     </div>
 
     <div id="compose">
@@ -260,139 +247,218 @@
     </div>
   </section>
 
-  <footer>Nón Sơn · manphim · Phase 1 — compose engine</footer>
+  <footer>Nón Sơn · manphim · Phase 1–2 — AI + compose</footer>
 </div>
 
 <script>
 (function(){
   "use strict";
 
-  // ---- Tabs ----
-  var tabUpload = document.getElementById('tabUpload');
-  var tabAI = document.getElementById('tabAI');
-  var paneUpload = document.getElementById('paneUpload');
-  var paneAI = document.getElementById('paneAI');
-  function selectTab(which){
-    var up = which === 'upload';
+  // ===== Cấu hình Supabase (anon key là public, an toàn để ở frontend) =====
+  var SB_URL  = "https://jwnslfdrudvkpwxvhdty.supabase.co";
+  var SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3bnNsZmRydWR2a3B3eHZoZHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzODcwNzIsImV4cCI6MjA5Nzk2MzA3Mn0.w1WjtkuVoXvX05Pn5lFJgwynYGllsY_D8NA5r-xbBQU";
+  var FN = SB_URL + "/functions/v1/generate-motif";
+
+  function $(id){ return document.getElementById(id); }
+  function escapeHtml(s){ return s.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  // ===== Tabs =====
+  var tabUpload = $('tabUpload'), tabAI = $('tabAI');
+  var paneUpload = $('paneUpload'), paneAI = $('paneAI');
+  function selectTab(up){
     tabUpload.setAttribute('aria-selected', up);
     tabAI.setAttribute('aria-selected', !up);
     paneUpload.classList.toggle('active', up);
     paneAI.classList.toggle('active', !up);
   }
-  tabUpload.addEventListener('click', function(){ selectTab('upload'); });
-  tabAI.addEventListener('click', function(){ selectTab('ai'); });
+  tabUpload.addEventListener('click', function(){ selectTab(true); });
+  tabAI.addEventListener('click', function(){ selectTab(false); });
 
-  // ---- AI shell controls (no backend yet) ----
-  var aiCreat = document.getElementById('aiCreat');
-  var aiCreatVal = document.getElementById('aiCreatVal');
+  // ===== Slider mức sáng tạo + số phương án =====
+  var aiCreat = $('aiCreat'), aiCreatVal = $('aiCreatVal');
   aiCreat.addEventListener('input', function(){
     aiCreatVal.textContent = this.value + '%';
     this.style.setProperty('--p', this.value + '%');
   });
-  var seg = document.getElementById('seg');
+  var seg = $('seg');
   seg.addEventListener('click', function(e){
     var b = e.target.closest('button'); if(!b) return;
     Array.prototype.forEach.call(seg.children, function(c){ c.setAttribute('aria-pressed','false'); });
     b.setAttribute('aria-pressed','true');
   });
+  function activeN(){ var b = seg.querySelector('[aria-pressed="true"]'); return b ? parseInt(b.textContent,10) : 4; }
 
-  // ---- Upload ----
-  var dropzone = document.getElementById('dropzone');
-  var fileInput = document.getElementById('fileInput');
+  // ===== Tải họa tiết trực tiếp (tab Tải lên) =====
+  var dropzone = $('dropzone'), fileInput = $('fileInput');
+  function wireDrop(zone, onFile){
+    zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('over'); });
+    zone.addEventListener('dragleave', function(){ zone.classList.remove('over'); });
+    zone.addEventListener('drop', function(e){
+      e.preventDefault(); zone.classList.remove('over');
+      if(e.dataTransfer.files && e.dataTransfer.files[0]) onFile(e.dataTransfer.files[0]);
+    });
+  }
   dropzone.addEventListener('click', function(){ if(!dropzone.classList.contains('has')) fileInput.click(); });
   dropzone.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fileInput.click(); } });
-  dropzone.addEventListener('dragover', function(e){ e.preventDefault(); dropzone.classList.add('over'); });
-  dropzone.addEventListener('dragleave', function(){ dropzone.classList.remove('over'); });
-  dropzone.addEventListener('drop', function(e){
-    e.preventDefault(); dropzone.classList.remove('over');
-    if(e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-  });
-  fileInput.addEventListener('change', function(){ if(this.files[0]) handleFile(this.files[0]); });
+  wireDrop(dropzone, readMotifFile);
+  fileInput.addEventListener('change', function(){ if(this.files[0]) readMotifFile(this.files[0]); });
 
-  function handleFile(file){
+  function readMotifFile(file){
     if(!/^image\//.test(file.type)) return;
     var reader = new FileReader();
     reader.onload = function(ev){
       var img = new Image();
-      img.onload = function(){ onMotifReady(img, file.name, img.naturalWidth + '×' + img.naturalHeight); };
+      img.onload = function(){
+        setMotifImg(img);
+        dropzone.classList.add('has');
+        dropzone.innerHTML =
+          '<img class="thumb" src="'+img.src+'" alt="" />'+
+          '<div class="meta"><strong>'+escapeHtml(file.name)+'</strong><span>'+img.naturalWidth+'×'+img.naturalHeight+'</span></div>'+
+          '<button class="btn-ghost" id="changeBtn">Đổi ảnh</button>';
+        $('changeBtn').addEventListener('click', function(e){ e.stopPropagation(); fileInput.click(); });
+      };
       img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   }
 
-  function onMotifReady(img, name, dims){
-    motif = img;
-    // Đổi dropzone sang trạng thái đã có ảnh
-    dropzone.classList.add('has');
-    dropzone.innerHTML =
-      '<img class="thumb" src="'+img.src+'" alt="" />'+
-      '<div class="meta"><strong>'+escapeHtml(name)+'</strong><span>'+dims+'</span></div>'+
-      '<button class="btn-ghost" id="changeBtn">Đổi ảnh</button>';
-    document.getElementById('changeBtn').addEventListener('click', function(e){ e.stopPropagation(); fileInput.click(); });
-    // Hiện compose
-    document.getElementById('emptyState').style.display = 'none';
-    document.getElementById('compose').style.display = 'block';
-    setupCanvas();
-    render();
+  // ===== Ảnh tham khảo cho AI =====
+  var aiDrop = $('aiDrop'), aiFileInput = $('aiFileInput'), aiRefDataUrl = null;
+  aiDrop.addEventListener('click', function(){ if(!aiDrop.classList.contains('has')) aiFileInput.click(); });
+  aiDrop.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); aiFileInput.click(); } });
+  wireDrop(aiDrop, readRefFile);
+  aiFileInput.addEventListener('change', function(){ if(this.files[0]) readRefFile(this.files[0]); });
+
+  function readRefFile(file){
+    if(!/^image\//.test(file.type)) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      aiRefDataUrl = ev.target.result;
+      aiDrop.classList.add('has');
+      aiDrop.innerHTML =
+        '<img class="thumb" src="'+aiRefDataUrl+'" alt="" />'+
+        '<div class="meta"><strong>'+escapeHtml(file.name)+'</strong><span>ảnh tham khảo</span></div>'+
+        '<button class="btn-ghost" id="aiChangeBtn">Đổi</button>';
+      $('aiChangeBtn').addEventListener('click', function(e){ e.stopPropagation(); aiFileInput.click(); });
+    };
+    reader.readAsDataURL(file);
   }
 
-  // ---- Compose engine (tile + scale) ----
-  var motif = null;
-  var LOGICAL = 560;                 // toạ độ logic của khung film
-  var canvas = document.getElementById('filmCanvas');
-  var ctx = canvas.getContext('2d');
-  var dpr = Math.min(window.devicePixelRatio || 1, 2);
-  var sizeSlider = document.getElementById('sizeSlider');
-  var sizeVal = document.getElementById('sizeVal');
-  var chipTile = document.getElementById('chipTile');
-  var chipDensity = document.getElementById('chipDensity');
+  // ===== Gọi AI tạo motif =====
+  var aiGenBtn = $('aiGenBtn'), aiGenLabel = $('aiGenLabel');
+  var aiKeywords = $('aiKeywords'), aiMsg = $('aiMsg'), aiResults = $('aiResults');
 
+  function showMsg(t){ aiMsg.style.display='block'; aiMsg.textContent = t; }
+  function clearMsg(){ aiMsg.style.display='none'; aiMsg.textContent = ''; }
+  function setGenLoading(on){ aiGenBtn.disabled = on; aiGenLabel.textContent = on ? 'Đang tạo, chờ chút…' : 'Tạo họa tiết'; }
+
+  async function callFn(payload){
+    var r = await fetch(FN, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+SB_ANON, 'apikey':SB_ANON },
+      body: JSON.stringify(payload)
+    });
+    var data = await r.json().catch(function(){ return {}; });
+    if(!r.ok || data.error) throw new Error(data.error || ('Máy chủ trả lỗi ' + r.status));
+    return data;
+  }
+
+  aiGenBtn.addEventListener('click', async function(){
+    clearMsg();
+    var kw = aiKeywords.value.trim();
+    if(!kw && !aiRefDataUrl){ showMsg('Hãy nhập từ khóa hoặc tải ảnh tham khảo trước khi tạo.'); return; }
+    setGenLoading(true); aiResults.innerHTML = '';
+    try{
+      var data = await callFn({ mode:'draft', keywords:kw, creativity_pct:parseInt(aiCreat.value,10), n:activeN(), input_image:aiRefDataUrl });
+      if(!data.images || !data.images.length) throw new Error('Không nhận được ảnh nào.');
+      renderGrid(data.images);
+      if(data.errors && data.errors.length) showMsg('Một số phương án lỗi: ' + data.errors.join(' | '));
+    }catch(e){ showMsg('Lỗi: ' + e.message); }
+    finally{ setGenLoading(false); }
+  });
+
+  function renderGrid(images){
+    aiResults.innerHTML = '';
+    images.forEach(function(src){
+      var card = document.createElement('div'); card.className = 'gcard'; card.dataset.full = src;
+      var im = document.createElement('img'); im.src = src; im.alt = '';
+      var act = document.createElement('div'); act.className = 'gactions';
+      var use = document.createElement('button'); use.className = 'btn-ghost'; use.textContent = 'Dùng ảnh này';
+      var up  = document.createElement('button'); up.className = 'btn-ghost'; up.textContent = 'Nâng 4K';
+      use.addEventListener('click', function(){ loadMotifFromSrc(card.dataset.full); });
+      up.addEventListener('click', function(){ upgradeCard(card, up); });
+      act.appendChild(use); act.appendChild(up);
+      card.appendChild(im); card.appendChild(act); aiResults.appendChild(card);
+    });
+  }
+
+  async function upgradeCard(card, btn){
+    clearMsg();
+    var old = btn.textContent; btn.disabled = true; btn.textContent = 'Đang nâng…';
+    try{
+      var data = await callFn({ mode:'upgrade', input_image:card.dataset.full, keywords:aiKeywords.value.trim() });
+      var up = data.images && data.images[0];
+      if(!up) throw new Error('Không nhận được ảnh 4K.');
+      card.dataset.full = up; card.querySelector('img').src = up;
+      btn.textContent = 'Đã 4K';
+    }catch(e){ showMsg('Lỗi nâng 4K: ' + e.message); btn.textContent = old; btn.disabled = false; }
+  }
+
+  function loadMotifFromSrc(src){
+    var img = new Image();
+    img.onload = function(){ setMotifImg(img); };
+    img.onerror = function(){ showMsg('Không tải được ảnh để dựng.'); };
+    img.src = src;
+  }
+
+  // ===== Compose engine (tile + scale) =====
+  var motif = null, LOGICAL = 560;
+  var canvas = $('filmCanvas'), ctx = canvas.getContext('2d');
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var sizeSlider = $('sizeSlider'), sizeVal = $('sizeVal');
+  var chipTile = $('chipTile'), chipDensity = $('chipDensity');
+
+  function setMotifImg(img){
+    motif = img;
+    $('emptyState').style.display = 'none';
+    $('compose').style.display = 'block';
+    setupCanvas(); render();
+    $('composeCard').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
   function setupCanvas(){
-    canvas.width = LOGICAL * dpr;
-    canvas.height = LOGICAL * dpr;
+    canvas.width = LOGICAL * dpr; canvas.height = LOGICAL * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-
   function updateSliderFill(el){
     var pct = (el.value - el.min) / (el.max - el.min) * 100;
     el.style.background = 'linear-gradient(90deg,var(--teal) 0%,var(--teal) '+pct+'%,var(--border-2) '+pct+'%,var(--border-2) 100%)';
   }
-
   // Vẽ lại canvas — KHÔNG tạo lại họa tiết, chỉ đổi tỉ lệ lặp => tức thì
   function render(){
     if(!motif) return;
     var tile = parseInt(sizeSlider.value, 10);
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(0, 0, LOGICAL, LOGICAL);
+    ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, LOGICAL, LOGICAL);
     for(var y = 0; y < LOGICAL; y += tile){
-      for(var x = 0; x < LOGICAL; x += tile){
-        ctx.drawImage(motif, x, y, tile, tile);
-      }
+      for(var x = 0; x < LOGICAL; x += tile){ ctx.drawImage(motif, x, y, tile, tile); }
     }
     var across = Math.ceil(LOGICAL / tile);
     sizeVal.textContent = tile + ' px';
     chipTile.textContent = tile + ' px';
     chipDensity.textContent = '~' + (across * across) + ' lần lặp';
   }
-
   sizeSlider.addEventListener('input', function(){ updateSliderFill(this); render(); });
 
-  // ---- Export (rasterize ở độ phân giải cao) ----
-  document.getElementById('exportBtn').addEventListener('click', function(){
+  // ===== Xuất PNG độ phân giải cao =====
+  $('exportBtn').addEventListener('click', function(){
     if(!motif) return;
-    var out = parseInt(document.getElementById('resSelect').value, 10);
+    var out = parseInt($('resSelect').value, 10);
     var tile = parseInt(sizeSlider.value, 10);
-    var across = LOGICAL / tile;                 // giữ nguyên mật độ đang xem
-    var tileOut = out / across;
-    var off = document.createElement('canvas');
-    off.width = out; off.height = out;
+    var across = LOGICAL / tile, tileOut = out / across;
+    var off = document.createElement('canvas'); off.width = out; off.height = out;
     var octx = off.getContext('2d');
-    octx.fillStyle = '#FFFFFF';
-    octx.fillRect(0, 0, out, out);
+    octx.fillStyle = '#FFFFFF'; octx.fillRect(0, 0, out, out);
     for(var y = 0; y < out; y += tileOut){
-      for(var x = 0; x < out; x += tileOut){
-        octx.drawImage(motif, x, y, tileOut, tileOut);
-      }
+      for(var x = 0; x < out; x += tileOut){ octx.drawImage(motif, x, y, tileOut, tileOut); }
     }
     off.toBlob(function(blob){
       var a = document.createElement('a');
@@ -402,9 +468,6 @@
       setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
     }, 'image/png');
   });
-
-  // ---- utils ----
-  function escapeHtml(s){ return s.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 
   updateSliderFill(sizeSlider);
 })();
