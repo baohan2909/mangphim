@@ -127,7 +127,7 @@
         <p>Nón Sơn · Thiết kế màng phim nhúng nước</p>
       </div>
     </div>
-    <div class="ver">v0.2</div>
+    <div class="ver">v0.3</div>
   </header>
 
   <!-- 1. NGUỒN HỌA TIẾT -->
@@ -247,7 +247,7 @@
     </div>
   </section>
 
-  <footer>Nón Sơn · manphim · Phase 1–2 — AI + compose</footer>
+  <footer>Nón Sơn · manphim · Phase 2 — AI + compose (tối ưu chi phí)</footer>
 </div>
 
 <script>
@@ -333,15 +333,29 @@
     if(!/^image\//.test(file.type)) return;
     var reader = new FileReader();
     reader.onload = function(ev){
-      aiRefDataUrl = ev.target.result;
-      aiDrop.classList.add('has');
-      aiDrop.innerHTML =
-        '<img class="thumb" src="'+aiRefDataUrl+'" alt="" />'+
-        '<div class="meta"><strong>'+escapeHtml(file.name)+'</strong><span>ảnh tham khảo</span></div>'+
-        '<button class="btn-ghost" id="aiChangeBtn">Đổi</button>';
-      $('aiChangeBtn').addEventListener('click', function(e){ e.stopPropagation(); aiFileInput.click(); });
+      var img = new Image();
+      img.onload = function(){
+        // Nén ref về tối đa 1024px + JPEG => giảm mạnh token đầu vào (rẻ hơn nhiều khi nhân số phương án)
+        aiRefDataUrl = downscaleDataUrl(img, 1024);
+        aiDrop.classList.add('has');
+        aiDrop.innerHTML =
+          '<img class="thumb" src="'+aiRefDataUrl+'" alt="" />'+
+          '<div class="meta"><strong>'+escapeHtml(file.name)+'</strong><span>ảnh tham khảo (đã nén)</span></div>'+
+          '<button class="btn-ghost" id="aiChangeBtn">Đổi</button>';
+        $('aiChangeBtn').addEventListener('click', function(e){ e.stopPropagation(); aiFileInput.click(); });
+      };
+      img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
+  }
+
+  function downscaleDataUrl(img, maxSize){
+    var w = img.naturalWidth, h = img.naturalHeight;
+    var scale = Math.min(1, maxSize / Math.max(w, h));
+    var cw = Math.max(1, Math.round(w * scale)), ch = Math.max(1, Math.round(h * scale));
+    var c = document.createElement('canvas'); c.width = cw; c.height = ch;
+    c.getContext('2d').drawImage(img, 0, 0, cw, ch);
+    return c.toDataURL('image/jpeg', 0.85);
   }
 
   // ===== Gọi AI tạo motif =====
@@ -384,24 +398,10 @@
       var im = document.createElement('img'); im.src = src; im.alt = '';
       var act = document.createElement('div'); act.className = 'gactions';
       var use = document.createElement('button'); use.className = 'btn-ghost'; use.textContent = 'Dùng ảnh này';
-      var up  = document.createElement('button'); up.className = 'btn-ghost'; up.textContent = 'Nâng 4K';
       use.addEventListener('click', function(){ loadMotifFromSrc(card.dataset.full); });
-      up.addEventListener('click', function(){ upgradeCard(card, up); });
-      act.appendChild(use); act.appendChild(up);
+      act.appendChild(use);
       card.appendChild(im); card.appendChild(act); aiResults.appendChild(card);
     });
-  }
-
-  async function upgradeCard(card, btn){
-    clearMsg();
-    var old = btn.textContent; btn.disabled = true; btn.textContent = 'Đang nâng…';
-    try{
-      var data = await callFn({ mode:'upgrade', input_image:card.dataset.full, keywords:aiKeywords.value.trim() });
-      var up = data.images && data.images[0];
-      if(!up) throw new Error('Không nhận được ảnh 4K.');
-      card.dataset.full = up; card.querySelector('img').src = up;
-      btn.textContent = 'Đã 4K';
-    }catch(e){ showMsg('Lỗi nâng 4K: ' + e.message); btn.textContent = old; btn.disabled = false; }
   }
 
   function loadMotifFromSrc(src){
