@@ -26,7 +26,7 @@ window.APP_SETTINGS_DEFAULTS = {
   'sys.maintenance_mode': false,
   'sys.maintenance_message': 'Hệ thống đang bảo trì, vui lòng quay lại sau.',
   'sys.force_logout_ts': 0,
-  'sys.cache_version': 'v17.40',
+  'sys.cache_version': 'v17.41',
   'chk.bat': true,
   'chk.nhac_bat': true,
   'chk.gio_nhac': '09:00',
@@ -420,7 +420,7 @@ function goToPage(page){
     const lcNav=document.getElementById('nav-lichca');
     if(lcNav)lcNav.classList.add('active');
   }
-  // [v17.40] Khách Online: nav id 'nav-khachonline' nhưng page 'donhang-nhan'
+  // [v17.41] Khách Online: nav id 'nav-khachonline' nhưng page 'donhang-nhan'
   if(page==='donhang-nhan'){ const koNav=document.getElementById('nav-khachonline'); if(koNav)koNav.classList.add('active'); }
   document.getElementById('header-page-title').textContent=PAGE_TITLES[page]||'';
   // [v11.8+] Force scroll về 0 mỗi lần đổi trang để header xanh không bị che
@@ -444,8 +444,8 @@ function goToPage(page){
   }
   if(page==='lichca')   taiLichCa();
   if(page==='lichca-ql') taiLichCaQL();
-  if(page==='chamcong' && typeof tcRefreshBanner==='function') setTimeout(tcRefreshBanner, 300); // [v17.40] Trưởng ca
-  if(page==='banhang' && SESSION && SESSION.vaiTro==='CUA_HANG' && typeof tcRefreshBanner==='function') setTimeout(tcRefreshBanner, 300); // [v17.40] thẻ TC cho cửa hàng
+  if(page==='chamcong' && typeof tcRefreshBanner==='function') setTimeout(tcRefreshBanner, 300); // [v17.41] Trưởng ca
+  if(page==='banhang' && SESSION && SESSION.vaiTro==='CUA_HANG' && typeof tcRefreshBanner==='function') setTimeout(tcRefreshBanner, 300); // [v17.41] thẻ TC cho cửa hàng
   if(page==='dashboard') taiDashboard(); // [FIX v9 #12]
   if(page==='donnghi-acc') taiDonNghiACC(); // [v10 Yc #4]
   if(page==='duyetyc')     taiDuyetYC();    // [v10 Yc #5]
@@ -560,7 +560,7 @@ const HUB_GROUPS = {
 };
 function _hubItemVisible(it){
   if(typeof SESSION==='undefined'||!SESSION) return false;
-  if(it.setting && _getSetting(it.setting, true) === false) return false; // [v17.40] tắt theo công tắc tính năng
+  if(it.setting && _getSetting(it.setting, true) === false) return false; // [v17.41] tắt theo công tắc tính năng
   if(SESSION.vaiTro==='ADMIN') return true;          // ADMIN thấy mọi chức năng
   var baseVisible = Array.isArray(it.roles) && it.roles.indexOf(SESSION.vaiTro) !== -1;
   // [A2] chức danh ĐÃ cấu hình rõ ràng có thể MỞ THÊM tile (cộng thêm, không gỡ của ai)
@@ -574,6 +574,11 @@ function moLichCaQL_safe(){ try{ goToPage('lichca-ql'); }catch(e){ try{ taiLichC
 //  [B1] SỰ VỤ KHU VỰC — màn hình cho CƠ ĐỘNG (pool / nhận việc)
 //  Sự vụ tự hiện theo khu vực; hiển thị "Điều phối: Ban quản lý" (ẩn việc tự động).
 // ═════════════════════════════════════════════════════════════════════════
+// [v17.41] Bộ lọc view "Sự vụ khu vực"
+let _svcdScope = 'all';     // 'all' | 'mine' | 'done'
+let _svcdStatus = 'all';    // 'all' | 'dang_xu_ly' | 'cho_ch' | 'hoan_tat'
+let _svcdSort = 'thoi_han'; // 'thoi_han' | 'muc_do'
+let _svcdData = [];
 function moSuVuCoDong(){
   let ov = document.getElementById('svcd-overlay');
   if(!ov){ ov = document.createElement('div'); ov.id='svcd-overlay'; document.body.appendChild(ov); }
@@ -593,31 +598,53 @@ async function svcdReload(){
   const body = document.getElementById('svcd-body');
   if(!body) return;
   try{
-    const ma = SESSION.ma;
-    const [r1, r2] = await Promise.all([
-      supa.rpc('fn_su_vu_co_dong_list',    { p_ma_nv: ma }),
-      supa.rpc('fn_su_vu_co_dong_cua_toi', { p_ma_nv: ma })
-    ]);
-    if(r1.error) throw r1.error;
-    const cho = Array.isArray(r1.data) ? r1.data : [];
-    const cua = Array.isArray(r2.data) ? r2.data : [];
-    body.innerHTML =
-      svcdSection('Chờ nhận', cho, 'nhan') +
-      svcdSection('Tôi đang xử lý', cua, 'xong');
+    const { data, error } = await supa.rpc('fn_su_vu_co_dong_all', { p_ma_nv: SESSION.ma });
+    if(error) throw error;
+    _svcdData = Array.isArray(data) ? data : [];
+    svcdRender();
   }catch(e){
     body.innerHTML = '<div style="text-align:center;color:#DC2626;padding:24px">Lỗi tải sự vụ: '+escHtml(e.message||'')+'</div>';
   }
 }
 
-function svcdSection(title, list, mode){
-  const head = `<div style="font-weight:800;color:#0F2E45;font-size:14px;margin:6px 2px 10px">${title} <span style="color:#1D9E75">(${list.length})</span></div>`;
-  if(!list.length){
-    return head + `<div style="text-align:center;color:#94A3B8;padding:18px;font-size:13px;background:#fff;border-radius:10px;margin-bottom:16px">Không có sự vụ.</div>`;
-  }
-  return head + list.map(s => svcdCard(s, mode)).join('') + '<div style="height:8px"></div>';
+function svcdFilterBar(){
+  const dd = (fn,val,opts) => `<select onchange="${fn}(this.value)" style="flex:1;min-width:0;padding:8px 10px;border:1px solid #CBD5E1;border-radius:9px;font-size:13px;font-weight:600;color:#0F2E45;background:#fff">${opts.map(([v,l])=>`<option value="${v}"${val===v?' selected':''}>${l}</option>`).join('')}</select>`;
+  return `<div style="display:flex;gap:8px;margin-bottom:8px">
+      ${dd('svcdSetScope', _svcdScope, [['all','Tất cả sự vụ'],['mine','Của tôi'],['done','Hoàn tất']])}
+      ${dd('svcdSetStatus', _svcdStatus, [['all','Mọi trạng thái'],['dang_xu_ly','Đang xử lý'],['cho_ch','Chờ CH xác nhận'],['hoan_tat','Hoàn tất']])}
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      ${dd('svcdSetSort', _svcdSort, [['thoi_han','Sắp: Thời hạn'],['muc_do','Sắp: Mức độ']])}
+    </div>`;
 }
 
-function svcdCard(s, mode){
+function svcdRender(){
+  const body = document.getElementById('svcd-body');
+  if(!body) return;
+  const ma = SESSION.ma;
+  let arr = _svcdData.slice();
+  if(_svcdScope === 'mine') arr = arr.filter(s => (s.nguoi_xu_ly_ma||'') === ma);
+  else if(_svcdScope === 'done') arr = arr.filter(s => s.trang_thai === 'HOAN_TAT');
+  if(_svcdStatus === 'dang_xu_ly') arr = arr.filter(s => ['MOI_TAO','DA_TIEP_NHAN','DANG_XU_LY','DA_PHAN_HOI'].includes(s.trang_thai));
+  else if(_svcdStatus === 'cho_ch') arr = arr.filter(s => s.trang_thai === 'DA_XU_LY_XONG');
+  else if(_svcdStatus === 'hoan_tat') arr = arr.filter(s => s.trang_thai === 'HOAN_TAT');
+  if(_svcdSort === 'thoi_han'){
+    arr.sort((a,b)=>{
+      const da = a.deadline_xu_ly ? new Date(a.deadline_xu_ly).getTime() : Infinity;
+      const db = b.deadline_xu_ly ? new Date(b.deadline_xu_ly).getTime() : Infinity;
+      return da !== db ? da - db : new Date(b.created_at) - new Date(a.created_at);
+    });
+  } else {
+    const o = { KHAN_CAP:0, QUAN_TRONG:1, CAN_THIET:2 };
+    arr.sort((a,b)=>{ const d = (o[a.muc_do]??9) - (o[b.muc_do]??9); return d !== 0 ? d : new Date(b.created_at) - new Date(a.created_at); });
+  }
+  body.innerHTML = svcdFilterBar() +
+    `<div style="font-size:12px;color:#64748B;font-weight:600;margin:0 2px 10px">${arr.length} sự vụ</div>` +
+    (arr.length ? arr.map(svcdCard).join('') + '<div style="height:8px"></div>'
+                : '<div style="text-align:center;color:#94A3B8;padding:24px;font-size:13px;background:#fff;border-radius:10px">Không có sự vụ.</div>');
+}
+
+function svcdCard(s){
   const mdLbl = { KHAN_CAP:'Khẩn cấp', QUAN_TRONG:'Quan trọng', CAN_THIET:'Cần thiết' }[s.muc_do] || s.muc_do;
   const accent = s.muc_do==='KHAN_CAP' ? '#DC2626' : s.muc_do==='QUAN_TRONG' ? '#D97706' : '#1B4965';
   let dl = '';
@@ -626,12 +653,18 @@ function svcdCard(s, mode){
     const past = d.getTime() < Date.now();
     dl = `<div style="font-size:12px;font-weight:700;margin-top:6px;color:${past?'#DC2626':'#475569'}">Hạn: ${pad(d.getDate())}/${pad(d.getMonth()+1)} ${pad(d.getHours())}:${pad(d.getMinutes())}${past?' · QUÁ HẠN':''}</div>`;
   }
-  const btn = mode==='nhan'
-    ? `<button onclick="svcdNhanViec('${s.id}')" style="width:100%;margin-top:10px;background:linear-gradient(135deg,#1D9E75,#0F6E56);color:#fff;border:none;padding:10px;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer">Nhận việc</button>`
-    : `<button onclick="svcdXong('${s.id}')" style="width:100%;margin-top:10px;background:#0F6E56;color:#fff;border:none;padding:10px;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer">Xác nhận đã xử lý xong</button>`;
+  let ttBadge = '', btn = '';
+  if(s.trang_thai === 'HOAN_TAT'){
+    ttBadge = '<span style="background:#DCFCE7;color:#15803D;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px">Hoàn tất</span>';
+  } else if(s.trang_thai === 'DA_XU_LY_XONG'){
+    ttBadge = '<span style="background:#FEF3C7;color:#B45309;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px">Chờ CH xác nhận</span>';
+  } else {
+    btn = `<button onclick="svcdXong('${s.id}')" style="width:100%;margin-top:10px;background:#0F6E56;color:#fff;border:none;padding:10px;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer">Xác nhận đã xử lý xong</button>`;
+  }
   return `<div style="background:#fff;border-left:4px solid ${accent};border-radius:10px;padding:12px 13px;margin-bottom:10px;box-shadow:0 1px 4px rgba(15,46,69,.06)">
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:5px;flex-wrap:wrap">
       <span style="background:${accent};color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px">${mdLbl}</span>
+      ${ttBadge}
       ${s.ma_sv?`<span style="font-size:11px;color:#64748B;font-weight:600">${escHtml(s.ma_sv)}</span>`:''}
     </div>
     <div style="font-weight:700;color:#0F172A;font-size:14px">${escHtml(s.tieu_de||'')}</div>
@@ -666,6 +699,9 @@ window.svcdXong = async function(id){
     svcdReload();
   }catch(e){ if(typeof showToast==='function') showToast('⚠ '+e.message,'warn'); }
 };
+window.svcdSetScope  = function(v){ _svcdScope = v || 'all'; svcdRender(); };
+window.svcdSetStatus = function(v){ _svcdStatus = v || 'all'; svcdRender(); };
+window.svcdSetSort   = function(v){ _svcdSort = v || 'thoi_han'; svcdRender(); };
 window.moSuVuCoDong = moSuVuCoDong;
 
 function hubOpenGroup(key){
@@ -936,7 +972,7 @@ function khoiDongApp(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('main-header').style.display='block';
   document.getElementById('main-app').style.display='block';
-  if(typeof tcRefreshBanner==='function') setTimeout(tcRefreshBanner, 350); // [v17.40] khôi phục thẻ Trưởng ca + hero khi tải lại
+  if(typeof tcRefreshBanner==='function') setTimeout(tcRefreshBanner, 350); // [v17.41] khôi phục thẻ Trưởng ca + hero khi tải lại
   // [v11.7+ fix] Force scroll về đầu - gọi nhiều lần để bắt async scroll restoration
   // Chrome/Safari đôi khi tự khôi phục scroll position sau khi DOM thay đổi
   window.scrollTo(0, 0);
@@ -1124,7 +1160,7 @@ function khoiDongApp(){
     // Ẩn tab Chấm công và Bản đồ (CH không cần)
     document.getElementById('nav-chamcong').style.display='none';
     document.getElementById('nav-bandochidung').style.display='none';
-    // [v17.40] Tắt tính năng Lịch hoạt động → ẩn tab Lịch của cửa hàng
+    // [v17.41] Tắt tính năng Lịch hoạt động → ẩn tab Lịch của cửa hàng
     if(_getSetting('lichhd.enabled', true) === false){ const _nL=document.getElementById('nav-lichca'); if(_nL) _nL.style.display='none'; }
     // Hiện tab Bán hàng
     document.getElementById('nav-banhang').style.display='';
@@ -1197,7 +1233,7 @@ function selectCH(ma,ten){
   // [v10.85 YC#8] Nếu là Đội SALE → hiện card chọn CH thực tế
   _capNhatUISaleTarget(ten || ma);
   updateSubmitBtn();
-  if(typeof tcRefreshBanner==='function') tcRefreshBanner(); // [v17.40] Trưởng ca theo cửa hàng
+  if(typeof tcRefreshBanner==='function') tcRefreshBanner(); // [v17.41] Trưởng ca theo cửa hàng
 }
 function hideCHSuggest(){setTimeout(()=>{document.getElementById('ch-suggest-list').style.display='none';},150);}
 
@@ -1773,7 +1809,7 @@ function doSubmit(){
   }
 
   // [v12.4] Face verify đã chạy ở moCamera() khi face BẬT → không cần check ở đây nữa
-  // [v17.40] Bảng hỏi Trưởng ca khi vào ca + ca chưa có TC + chưa tick nút gạt
+  // [v17.41] Bảng hỏi Trưởng ca khi vào ca + ca chưa có TC + chưa tick nút gạt
   if(typeof tcCheckDialogBeforeSubmit==='function'){ tcCheckDialogBeforeSubmit(_doSubmitContinueWithGPS); }
   else { _doSubmitContinueWithGPS(); }
 }
