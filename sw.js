@@ -12,7 +12,7 @@
  *   4. User bấm → skipWaiting + reload
  */
 
-const CACHE_VERSION = 'nonson-v17.38';
+const CACHE_VERSION = 'nonson-v17.39';
 const CACHE_NAME = `nonson-cache-${CACHE_VERSION}`;
 
 // Files cần precache cho offline (chỉ static assets quan trọng)
